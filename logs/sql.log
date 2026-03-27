@@ -1,0 +1,6 @@
+2026-03-26 12:50:20.552 [http-nio-8080-exec-1] DEBUG com.example.blog_demo.mapper.ArticleMapper.findById - ==>  Preparing: SELECT * FROM article WHERE id = ?
+2026-03-26 12:50:20.599 [http-nio-8080-exec-1] DEBUG com.example.blog_demo.mapper.ArticleMapper.findById - ==> Parameters: 999(Long)
+2026-03-26 12:50:20.653 [http-nio-8080-exec-1] DEBUG com.example.blog_demo.mapper.ArticleMapper.findById - <==      Total: 0
+2026-03-26 12:54:16.800 [http-nio-8080-exec-1] DEBUG com.example.blog_demo.mapper.ArticleMapper.findById - ==>  Preparing: SELECT * FROM article WHERE id = ?
+2026-03-26 12:54:16.853 [http-nio-8080-exec-1] DEBUG com.example.blog_demo.mapper.ArticleMapper.findById - ==> Parameters: 999(Long)
+2026-03-26 12:54:16.914 [http-nio-8080-exec-1] DEBUG com.example.blog_demo.mapper.ArticleMapper.findById - <==      Total: 0

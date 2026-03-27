@@ -2,6 +2,8 @@ package com.example.blog_demo.controller;
 
 
 import com.example.blog_demo.entity.Article;
+import com.example.blog_demo.entity.Result;
+import com.example.blog_demo.exception.BusinessException;
 import com.example.blog_demo.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,55 +25,74 @@ public class ArticleController {
 
     // 1. 新增文章
     @PostMapping
-    public Map<String, Object> create(@RequestBody Article article) {
-        Map<String, Object> result = new HashMap<>();
+    public Result<Article> create(@RequestBody Article article) {
+//        Map<String, Object> result = new HashMap<>();
         try {
             Article saved = articleService.create(article);
-            result.put("success", true);
-            result.put("data", saved);
+          /*  result.put("success", true);
+            result.put("data", saved);*/
+            return Result.success(saved);
         } catch (Exception e) {
-            result.put("success", false);
-            result.put("message", e.getMessage());
+            /*result.put("success", false);
+            result.put("message", e.getMessage());*/
+            return Result.error("failed to create one article");
         }
-        return result;
+//        return result;
     }
 
     // 2. 删除文章
     @DeleteMapping("/{id}")
-    public Map<String, Object> delete(@PathVariable Long id) {
-        Map<String, Object> result = new HashMap<>();
+//    public Map<String, Object> delete(@PathVariable Long id) {
+    public Result<Void> delete(@PathVariable Long id) {
+//        Map<String, Object> result = new HashMap<>();
         boolean success = articleService.delete(id);
-        result.put("success", success);
-        if (!success) {
-            result.put("message", "文章不存在");
+        if(success){
+            return Result.success();
+        }else {
+//            result.put("message", "文章不存在");
+            throw new RuntimeException("the article you are trying to delete doesn't exist");
         }
-        return result;
+//        return result;
     }
 
     // 3. 更新文章
     @PutMapping("/{id}")
-    public Map<String, Object> update(@PathVariable Long id, @RequestBody Article article) {
-        Map<String, Object> result = new HashMap<>();
+    public Result<Article> update(@PathVariable Long id, @RequestBody Article article) {
+//        Map<String, Object> result = new HashMap<>();
         article.setId(id);  // 设置要更新的ID
         boolean success = articleService.update(article);
-        result.put("success", success);
+//        result.put("success", success);
         if (success) {
-            result.put("data", articleService.getById(id));
+//            result.put("data", articleService.getById(id));
+            return Result.success(articleService.getById(id));
         } else {
-            result.put("message", "文章不存在");
+            throw new RuntimeException("the article you are trying to update doesn't exist");
+//            return Result.error("the article you are trying to update doesn't exist ");
+//            result.put("message", "文章不存在");
         }
-        return result;
+//        return result;
     }
 
     // 4. 查询所有文章
     @GetMapping
-    public List<Article> list() {
-        return articleService.listAll();
+    public Result<List<Article>> list() {
+        return Result.success(articleService.listAll());
     }
 
     // 5. 查询单篇文章
     @GetMapping("/{id}")
-    public Article getById(@PathVariable Long id) {
-        return articleService.getById(id);
+    public Result<Article> getById(@PathVariable Long id) {
+        Article article = articleService.getById(id);
+      /*  if(article != null){
+            return Result.success(article);
+        }else{
+//            return Result.notFound("article not found");
+            throw new RuntimeException("article not found");
+        }*/
+
+        if(article == null){
+            throw BusinessException.notFound("Business exception: article not found");
+        }
+        return Result.success(article);
     }
 }
